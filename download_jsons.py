@@ -2,35 +2,19 @@ import requests
 import csv
 import json
 import os
+import sys
 from tqdm import tqdm
 
-def get_extra_results(obj, query_to_es, line, auth):
-    # remove quote
-    hits_count = len(obj['hits']['hits'])
-    if hits_count<2000:
-        if query_to_es.endswith("\""):
-            original_query = query_to_es.split("q=")[1][1:-1]
-            remaining = 2000-hits_count
-            remade_query = query_to_es.split("q=")[0] + "q=" + original_query + "&size="+str(remaining)
-            result = requests.get(remade_query, auth=auth).content.decode("utf-8")
-            obj2 = json.loads(result)
-            for item in obj2['hits']['hits']:
-                if item not in obj['hits']['hits']:
-                    obj['hits']['hits'].append(item)
+def get_extra_results(obj, query_to_es, query, auth):
+    remaining = 2000 - len(obj['hits']['hits'])
+    remade_query = query_to_es.split("q=")[0] + "q=" + query + "&size=" + str(remaining)
+    result = requests.get(remade_query, auth=auth).content.decode("utf-8")
+    obj2 = json.loads(result)
+    for item in obj2['hits']['hits']:
+        if item not in obj['hits']['hits']:
+            obj['hits']['hits'].append(item)
 
-    # replace with topic_text
-    hits_count = len(obj['hits']['hits'])
-    if hits_count < 2000:
-            original_query = query_to_es.split("q=")[1][1:-1]
-            remaining = 2000 - hits_count
-            remade_query = query_to_es.split("q=")[0] + "q=" + line[1] + "&size=" + str(remaining)
-            result = requests.get(remade_query, auth=auth).content.decode("utf-8")
-            obj2 = json.loads(result)
-            for item in obj2['hits']['hits']:
-                if item not in obj['hits']['hits']:
-                    obj['hits']['hits'].append(item)
-
-def download(target_dir, num_of_results, extra_results, auth):
+def download(target_dir, extra_results, num_of_results, auth):
     with open("SP12023topics.csv", "r") as f:
         reader = csv.reader(f, delimiter=";")
         reader_len = sum(1 for line in reader) - 1
@@ -51,8 +35,15 @@ def download(target_dir, num_of_results, extra_results, auth):
             result = requests.get(url, auth=auth).content.decode("utf-8")
             obj = json.loads(result)
             
-            if extra_results:
-                get_extra_results(obj, query_to_es, line, auth)
+            hits_count = len(obj['hits']['hits'])
+            if extra_results and hits_count < 2000:
+                original_query = query_to_es.split("q=")[1][1:-1]
+                if query_to_es.endswith("\""):
+                    # remove quote
+                    get_extra_results(obj, query_to_es, query_to_es.split("q=")[1][1:-1], auth)
+
+                # replace with topic text
+                get_extra_results(obj, query_to_es, line[1], auth)
 
             if not os.path.exists(target_dir):
                 os.makedirs(target_dir)
@@ -69,5 +60,10 @@ if __name__ == "__main__":
         info = json.load(handler)
     auth = (info["user"], info["pass"])
 
-    download('Baseline_Jsons', 2000, True, auth)
-    download('Selective_Jsons', 100, False, auth)
+    args = sys.argv[1:]
+
+    dir_name = args[0]
+    num_of_results = int(args[1])
+    extra_results = True if int(args[2]) == 1 else False
+
+    download(dir_name, extra_results, num_of_results, auth)
