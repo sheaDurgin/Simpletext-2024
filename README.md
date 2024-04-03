@@ -9,7 +9,6 @@ This repository includes all of the codes for my submission to SimpleText Task 1
 - [Steps to Run](#Steps-to-Run)
 - [Model Details](#Model-Details)
 - [Results](#Top-100-Per-Query-Baseline-Results)
-- [Conclusion](#Conclusion)
 
 ## Installation
 
@@ -43,3 +42,43 @@ Clone the repository all to one folder to properly run. Directories may need to 
 - Get the SimpleText dataset from CLEF and have both the qrels and topics csv file in repository
 - Create a config.json file with user, password, and ElasticSearch URL Prefix, to log in to Elastic Search
 - run run_everything.py (can modify names of files and directories in this file)
+
+## Model Details
+
+The final results come from a combination of the ms-marco-electra-base cross encoder and the two baseline results from elastic search. The cross encoder does its own reranking of the top 100 results from elastic search, then that output is directed into a comination program that does a final reranking using a combination of the cross encoder ranking and the selective baseline results. This results in higher NDCG and MAP scores than any of the individual results.
+
+## Baseline Results
+
+    MRR: 0.6822189606436181
+    NDCG@10: 0.374
+    MAP: 0.438
+    flesch average: 28.673
+    smog average: 14.792
+    Coleman Liau average: 15.923
+    
+## Selective Results (Gives less total results)
+
+    MRR: 0.18872549019607843
+    NDCG@10: 0.409
+    MAP: 0.456
+    flesch average: 28.673
+    smog average: 14.792
+    Coleman Liau average: 15.923
+    
+## Reranking Results
+
+    MRR: 0.7033029878618113
+    NDCG@10: 0.307
+    MAP: 0.316
+    flesch average: 28.673
+    smog average: 14.792
+    Coleman Liau average: 15.923
+
+## Final Results
+
+    MRR: 0.8105742296918768
+    NDCG@10: 0.460
+    MAP: 0.506
+    flesch average: 28.673
+    smog average: 14.792
+    Coleman Liau average: 15.923
