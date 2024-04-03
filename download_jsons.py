@@ -5,6 +5,9 @@ import os
 import sys
 from tqdm import tqdm
 
+url_prefix = ''
+csv_file = 'simpletext_2024_task1_queries.csv'
+
 def get_extra_results(obj, query_to_es, query, auth):
     remaining = 2000 - len(obj['hits']['hits'])
     remade_query = query_to_es.split("q=")[0] + "q=" + query + "&size=" + str(remaining)
@@ -15,7 +18,7 @@ def get_extra_results(obj, query_to_es, query, auth):
             obj['hits']['hits'].append(item)
 
 def download(target_dir, extra_results, num_of_results, auth):
-    with open("SP12023topics.csv", "r") as f:
+    with open(csv_file, "r") as f:
         reader = csv.reader(f, delimiter=";")
         reader_len = sum(1 for line in reader) - 1
         f.seek(0)
@@ -24,7 +27,7 @@ def download(target_dir, extra_results, num_of_results, auth):
         counter = 1
     
         for line in tqdm(reader, desc='Creating JSONS', total=reader_len):
-            query_to_es = line[-1]
+            query_to_es = url_prefix + line[-1]
             url = query_to_es+ "&size=" + str(num_of_results)
             q_id = line[0]
             if q_id == pre_qid:
@@ -49,7 +52,7 @@ def download(target_dir, extra_results, num_of_results, auth):
                 os.makedirs(target_dir)
 
             # construct the output file path
-            output_file = os.path.join(target_dir, f"{q_id}_{counter}.json")
+            output_file = os.path.join(target_dir, f"{line[3].replace('.', '_')}.json")
 
             # dump the JSON to the output file
             with open(output_file, "w") as file:
@@ -59,6 +62,7 @@ if __name__ == "__main__":
     with open("config.json", "r") as handler:
         info = json.load(handler)
     auth = (info["user"], info["pass"])
+    url_prefix = info["url"]
 
     args = sys.argv[1:]
 

@@ -49,3 +49,24 @@ def read_topic_file(topic_filepath):
             pre_qid = q_id
             result[q_id + "_" + str(counter)] = (original_query, topic_text)
     return result
+
+def read_qrel_file(qrel_path, initial_retrieval):
+    dic = {}
+    with open(qrel_path, 'r') as f:
+        reader = csv.reader(f, delimiter='\t')
+        for line in reader:
+            qid, _, paper_id, label = line
+            qid = qid.replace('.', '_')
+            paper_id = int(paper_id)
+            if paper_id not in initial_retrieval[qid]:
+                continue
+            title, abstract = initial_retrieval[qid][paper_id]
+            if qid not in dic:
+                dic[qid] = []
+            dic[qid].append((title, abstract, int(label)))
+
+    return dic
+
+if __name__ == '__main__':
+    initial_retrieval = read_all_jsons(target_dir="Baseline_Jsons/")
+    dic = read_qrel_file('simpletext_2023_task1_train.qrels', initial_retrieval)
