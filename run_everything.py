@@ -28,7 +28,7 @@ print("Fine tuning cross encoder")
 subprocess.run(["python", "finetune.py", model_path, "--final"])
 
 print("Running cross encoder")
-subprocess.run(["python", "cross_encoder.py", baseline_file, rr_baseline_file, baseline_folder, model_path]) # rr = reranked
+subprocess.run(["python", "cross_encoder.py", baseline_file, rr_baseline_file, baseline_folder, ft_model_path]) # rr = reranked
 
 print("Combining scores of reranked baseline and selective")
 subprocess.run(["python", "combine_scores.py", rr_baseline_file, selective_file, final_file])
