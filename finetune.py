@@ -16,6 +16,15 @@ np.random.seed(seed_value)
 torch.manual_seed(seed_value)
 torch.cuda.manual_seed_all(seed_value)
 
+def fill_dev_samples(dev_samples, qid, query, topic_text, item, label):
+    if qid not in dev_samples:
+        dev_samples[qid] = {'query': query+" [QSP] "+topic_text, 'positive': set(), 'negative': set()}
+    if label == 0:
+        label = 'negative'
+    else:
+        label = 'positive'
+    dev_samples[qid][label].add(item[0]+" [TAT] "+item[1])
+
 model_name = sys.argv[1]
 model = CrossEncoder(model_name, device='cuda', max_length=512)
 tokens = ["[QSP]", "[TAT]"]
@@ -54,23 +63,11 @@ for qid in sample_dic:
                 label = 1
             train_samples.append(InputExample(texts=[original_query+" [QSP] "+topic_text, item[0]+" [TAT] "+item[1]], label=label))
             if '--val' not in sys.argv:
-                if qid not in dev_samples:
-                    dev_samples[qid] = {'query': original_query+" [QSP] "+topic_text, 'positive': set(), 'negative': set()}
-                if label == 0:
-                    label = 'negative'
-                else:
-                    label = 'positive'
-                dev_samples[qid][label].add(item[0]+" [TAT] "+item[1])
+                fill_dev_samples(dev_samples, qid, original_query, topic_text, item, label)
     else:
         for item in list_current_sample:
             label = item[2]
-            if qid not in dev_samples:
-                dev_samples[qid] = {'query': original_query+" [QSP] "+topic_text, 'positive': set(), 'negative': set()}
-            if label == 0:
-                label = 'negative'
-            else:
-                label = 'positive'
-            dev_samples[qid][label].add(item[0]+" [TAT] "+item[1])
+            fill_dev_samples(dev_samples, qid, original_query, topic_text, item, label)
 
     counter += 1
 
