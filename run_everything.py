@@ -23,9 +23,9 @@ subprocess.run(["python", "read_json.py", baseline_folder, baseline_file, n])
 print("Creating Selective txt")
 subprocess.run(["python", "read_json.py", selective_folder, selective_file])
 
-print("Fine tuning cross encoder")
-# subprocess.run(["python", "finetune.py", model_path])
-subprocess.run(["python", "finetune.py", model_path, "--final"])
+print("Fine tuning cross encoder, with only train data")
+subprocess.run(["python", "finetune.py", model_path])
+# subprocess.run(["python", "finetune.py", model_path, "--final"])
 
 print("Running cross encoder")
 subprocess.run(["python", "cross_encoder.py", baseline_file, rr_baseline_file, baseline_folder, ft_model_path]) # rr = reranked
@@ -35,3 +35,15 @@ subprocess.run(["python", "combine_scores.py", rr_baseline_file, selective_file,
 
 print("Running evaluation")
 subprocess.run(["python", "evaluation.py", final_file])
+
+print("Fine tuning cross encoder, with all data")
+# subprocess.run(["python", "finetune.py", model_path])
+subprocess.run(["python", "finetune.py", model_path, "--final"])
+
+print("Running cross encoder")
+subprocess.run(["python", "cross_encoder.py", baseline_file, rr_baseline_file, baseline_folder, ft_model_path]) # rr = reranked
+
+print("Combining scores of reranked baseline and selective")
+subprocess.run(["python", "combine_scores.py", rr_baseline_file, selective_file, final_file])
+
+print("Model trained on all data successfully")

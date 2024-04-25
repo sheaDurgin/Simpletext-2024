@@ -14,26 +14,14 @@ This repository includes all of the codes for my submission to SimpleText Task 1
 
 To run this code, you will need access to the [dataset](https://simpletext-project.com/2024/en/) for task 1 of SimpleText CLEF lab, and login details to access their servers. I will be assuming you have access for the rest of the explanation.
 
-The files from the dataset needed specifically are as follows
+First create a virtual environment, for example
 
-    simpletext_2023_task1_test.qrels
-    simpletext_2024_task1_train.qrels
-    simpletext_2024_task1_queries.csv
+    python -m venv myenv
+    source myenv/bin/activate
 
-The necessary installs for the code are as such
+Install libraries using pip and the requirements.txt
 
-    torch
-    tqdm
-    sentence_transformers
-    transformers
-    textstat
-    ranx
-    markdown
-    matplotlib
-
-You can install them using pip:
-
-    pip install torch tqdm sentence_transformers transformers textstat ranx markdown matplotlib
+    pip install -r requirements.txt
     
 Clone the repository all to one folder to properly run. Directories may need to be changed to fit your machine.
 
