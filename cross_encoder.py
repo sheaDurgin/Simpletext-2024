@@ -6,7 +6,6 @@ from sentence_transformers import CrossEncoder
 import torch
 import sys
 from tqdm import tqdm
-import signal
 
 # get abstracts from jsons
 def json_abstracts(doc_ids, topic, base_dir):
