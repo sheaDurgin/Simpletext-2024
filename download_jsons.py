@@ -7,9 +7,7 @@ from tqdm import tqdm
 from Preprocessing_tools import *
 
 url_prefix = ''
-qrel_url_prefix = ''
 csv_file = 'simpletext_2024_task1_queries.csv'
-qrel_file = 'simpletext_2024_task1_train.qrels'
 
 def get_extra_results(obj, url_prefix, query, auth, num_of_results):
     remaining = num_of_results - len(obj['hits']['hits'])
@@ -50,38 +48,6 @@ def download(target_dir, extra_results, num_of_results, auth):
             with open(output_file, "w") as file:
                 json.dump(obj, file)
 
-def download_all_qrels(target_dir, auth):
-    if not os.path.exists(target_dir):
-        os.makedirs(target_dir)
-
-    dic = {}
-    with open(qrel_file, "r") as f:
-        reader = csv.reader(f, delimiter=" ")
-        reader_len = sum(1 for line in reader) - 1
-        f.seek(0)
-        next(reader)
-    
-        for line in tqdm(reader, desc='Creating QREL JSON', total=reader_len):
-            qid, _, paper_id, _ = line
-            qid = qid.replace('.', '_')
-            if qid not in dic:
-                dic[qid] = {"hits": {"hits": []}}
-
-            url = qrel_url_prefix + str(paper_id)
-            result = requests.get(url, auth=auth).content.decode("utf-8")
-            obj = json.loads(result)
-
-            for item in obj['hits']['hits']:
-                if item not in dic[qid]['hits']['hits']:
-                    dic[qid]['hits']['hits'].append(item)
-
-        for qid in dic:
-            # construct the output file path
-            output_file = os.path.join(target_dir, f"{qid}.json")
-            # dump the JSON to the output file
-            with open(output_file, "w") as file:
-                json.dump(dic[qid], file)
-
 if __name__ == "__main__":
     with open("config.json", "r") as handler:
         info = json.load(handler)
@@ -95,8 +61,4 @@ if __name__ == "__main__":
     num_of_results = int(args[1])
     extra_results = True if int(args[2]) == 1 else False
 
-    if num_of_results > 0:
-        download(dir_name, extra_results, num_of_results, auth)
-    else:
-        print("downloading qrels")
-        download_all_qrels(dir_name, auth)
+    download(dir_name, extra_results, num_of_results, auth)

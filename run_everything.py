@@ -4,7 +4,6 @@ prefix = ''
 
 baseline_folder = f"{prefix}Baseline_Jsons/"
 selective_folder = f"{prefix}Selective_Jsons/"
-# qrel_json_folder = f"{prefix}simpletext_qrel_jsons/"
 
 baseline_file = f"{prefix}baseline.txt"
 selective_file = f"{prefix}selective.txt"
@@ -18,7 +17,6 @@ final_file = f"{prefix}final_results.txt"
 print("Downloading all JSONS")
 subprocess.run(["python", "download_jsons.py", baseline_folder, "2000", "1"])
 subprocess.run(["python", "download_jsons.py", selective_folder, "100", "0"])
-# subprocess.run(["python", "download_jsons.py", qrel_json_folder, "0", "0"])
 
 print("Creating Baseline txt")
 subprocess.run(["python", "read_json.py", baseline_folder, baseline_file, n])
