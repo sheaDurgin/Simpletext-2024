@@ -8,11 +8,17 @@ This repository includes all of the codes for my submission to SimpleText Task 1
 - [Text Files](#Text-Files)
 - [Steps to Run](#Steps-to-Run)
 - [Model Details](#Model-Details)
-- [Results](#Top-100-Per-Query-Baseline-Results)
+- [Results](#Final-Results-on-Unseen-2023-Test-Set)
 
 ## Installation
 
 To run this code, you will need access to the [dataset](https://simpletext-project.com/2024/en/) for task 1 of SimpleText CLEF lab, and login details to access their servers. I will be assuming you have access for the rest of the explanation.
+
+The files from the dataset needed specifically are as follows
+
+    simpletext_2023_task1_test.qrels
+    simpletext_2024_task1_train.qrels
+    simpletext_2024_task1_queries.csv
 
 The necessary installs for the code are as such
 
@@ -32,53 +38,23 @@ You can install them using pip:
 Clone the repository all to one folder to properly run. Directories may need to be changed to fit your machine.
 
 ## Text Files
-- baseline.txt -> the top 100 results from elastic search for each query
-- selective.txt -> the top results (up to 100) from elastic search for each query (no work done to get extra results)
+- baseline.txt -> the top 95 results from ElasticSearch in a three stage search (`"{query}"`, `{query}`, `{topictext}`)
+- selective.txt -> the top results from ElasticSearch in a one stage search (`"{query}"`)
 - rr_baseline.txt -> results from cross_encoder.py using baseline.txt as argument
 - final_results.txt -> results from combine_scores.py using rr_baseline.txt and selective.txt
 
 ## Steps to Run
 
 - Get the SimpleText dataset from CLEF and have both the qrels and topics csv file in repository
-- Create a config.json file with user, password, and ElasticSearch URL Prefix, to log in to Elastic Search
-- run run_everything.py (can modify names of files and directories in this file)
+- Create a config.json file (using example_config.json as a base) with user, password, and ElasticSearch URL, to log in to Elastic Search
+- run `python run_everything.py` (can modify names of files and directories in this file)
 
 ## Model Details
 
-The final results come from a combination of the ms-marco-electra-base cross encoder and the two baseline results from elastic search. The cross encoder does its own reranking of the top 100 results from elastic search, then that output is directed into a comination program that does a final reranking using a combination of the cross encoder ranking and the selective baseline results. This results in higher NDCG and MAP scores than any of the individual results.
+The final results come from a combination of a re-ranked baseline retrieval using our finetuned ms-marco-MiniLM-L-6-v2 cross encoder and the selective retrieval from ElasticSearch. The cross encoder does its own re-ranking of the top 95 results from ElasticSearch, then that output is directed into a comination program that does a final re-ranking using a combination of the cross encoder ranking and the selective retrieval. This is all based on the assumption that when ElasticSearch and the cross-encoder rank a document highly, there is a higher chance that it is more relevant than a document rated highly on only one system.
 
-## Baseline Results
+## Final Results on Unseen 2023 Test Set
 
-    MRR: 0.6822189606436181
-    NDCG@10: 0.374
-    MAP: 0.438
-    flesch average: 28.673
-    smog average: 14.792
-    Coleman Liau average: 15.923
-    
-## Selective Results (Gives less total results)
-
-    MRR: 0.18872549019607843
-    NDCG@10: 0.409
-    MAP: 0.456
-    flesch average: 28.673
-    smog average: 14.792
-    Coleman Liau average: 15.923
-    
-## Reranking Results
-
-    MRR: 0.7033029878618113
-    NDCG@10: 0.307
-    MAP: 0.316
-    flesch average: 28.673
-    smog average: 14.792
-    Coleman Liau average: 15.923
-
-## Final Results
-
-    MRR: 0.8105742296918768
-    NDCG@10: 0.460
-    MAP: 0.506
-    flesch average: 28.673
-    smog average: 14.792
-    Coleman Liau average: 15.923
+    MRR: 0.8946078431372548
+    NDCG@10: 0.5957062060467501
+    MAP: 0.2801930878426999
