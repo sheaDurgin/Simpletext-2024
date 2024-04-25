@@ -85,7 +85,7 @@ for qid in dev_samples:
 print(pos_cnt)
 print(neg_cnt)
 
-num_epochs = 8
+num_epochs = 5
 model_save_path = f"/mnt/netstore1_home/shea.durgin/{num_epochs}epochs-{model_name.split('/')[-1]}"
 train_dataloader = DataLoader(train_samples, shuffle=True, batch_size=4) # 4
 #During training, we use CESoftmaxAccuracyEvaluator to measure the accuracy on the dev set.
