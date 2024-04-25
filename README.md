@@ -34,7 +34,7 @@ Clone the repository all to one folder to properly run. Directories may need to 
 ## Steps to Run
 
 - Get the SimpleText dataset from CLEF and have both the qrels and topics csv file in repository
-- Create a config.json file (using example_config.json as a base) with user, password, and ElasticSearch URL, to log in to Elastic Search
+- Update the config.json file with user, password, and ElasticSearch URL, to log in to Elastic Search
 - run `python run_everything.py` (can modify names of files and directories in this file)
 
 ## Model Details
