@@ -53,7 +53,6 @@ if __name__ == "__main__":
         info = json.load(handler)
     auth = (info["user"], info["pass"])
     url_prefix = info["url"]
-    qrel_url_prefix = info["baseurl"]
 
     args = sys.argv[1:]
 
