@@ -1,7 +1,6 @@
 import csv
 import json
 import os
-import markdown
 
 def read_json(filename: str):
     # reads one json file
