@@ -6,8 +6,9 @@ from collections import defaultdict
 
 # argument 1 is directory path to folder of jsons
 # argument 2 is name of txt
+# argument 3 is n
 
-def make_json_file(directory_path, txtname):
+def make_json_file(directory_path, txtname, n=100):
     # Get a list of JSON file names in the directory and sort them in alphabetical order
     json_files = sorted([filename for filename in os.listdir(directory_path) if filename.endswith('.json')])
 
@@ -32,7 +33,7 @@ def make_json_file(directory_path, txtname):
                     continue
                 topic_doc_scores.append(f"{topic_id} 1 {doc_id} {rank} {score} Top_Gap\n")
                 rank += 1  
-                if rank > 100:
+                if rank > n:
                     break
 
     # normalize the scores in the list
@@ -67,4 +68,7 @@ def normalize(topic_doc_scores):
 
 if __name__ == "__main__":
     args = sys.argv[1:]
-    make_json_file(args[0], args[1])
+    n = 100
+    if len(args) > 2:
+        n = int(args[2])
+    make_json_file(args[0], args[1], n)
