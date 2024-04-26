@@ -83,7 +83,6 @@ def main():
         
     print("Reading json")
     base_dir = args[2]
-    initial_retrieval = read_all_jsons(target_dir=base_dir)
     topic_dic = read_topic_file("simpletext_2024_task1_queries.csv")
 
     model_path = args[3]
