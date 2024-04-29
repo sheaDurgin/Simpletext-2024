@@ -39,7 +39,15 @@ Clone the repository all to one folder to properly run. Directories may need to 
 
 ## Model Details
 
-The final results come from a combination of a re-ranked baseline retrieval using our finetuned ms-marco-MiniLM-L-6-v2 cross encoder and the selective retrieval from ElasticSearch. The cross encoder does its own re-ranking of the top 100 results from ElasticSearch, then that output is directed into a program that does a final re-ranking using a combination of the cross encoder ranking and the selective retrieval. This is all based on the assumption that when ElasticSearch and the cross-encoder rank a document highly, there is a higher chance that it is more relevant than a document rated highly on only one system. When training on only the 2023 training data, and testing on the 2023 testing data, we get results as shown below.
+The final results come from a combination of a re-ranked baseline retrieval using our finetuned ms-marco-MiniLM-L-6-v2 cross encoder and the selective retrieval from ElasticSearch. The cross encoder does its own re-ranking of the top 100 results from ElasticSearch, then that output is directed into a program that does a final re-ranking using a combination of the cross encoder ranking and the selective retrieval. This is all based on the assumption that when ElasticSearch and the cross-encoder rank a document highly, there is a higher chance that it is more relevant than a document rated highly on only one system. When training on only the 2023 training data, and testing on the 2023 testing data, we get results as shown [below](#Final-Results-on-Unseen-2023-Test-Set).
+
+## Fine-Tuning
+The model was fine-tuned using SimpleText 2024 Train qrels, following the training split from 2023, which leaves the rest for testing. The hyper parameters used are as such,
+
+    epochs: 5
+    learning rate: 1e-05
+    warmup_steps: 10% of train data
+    evaluator: CERerankingEvaluator
 
 ## Final Results on Unseen 2023 G Test Set
 
