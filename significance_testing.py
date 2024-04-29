@@ -43,10 +43,10 @@ def dcg_at_k(rank_list, relevant_documents, k):
         relevance = relevant_documents.get(doc_id, 0)  # Get relevance level (default to 0 if not found)
         dcg += (2 ** relevance - 1) / np.log2(i + 2)
     return dcg
-
+    
 # Calculate Normalized Discounted Cumulative Gain (NDCG) at k
 def ndcg_at_k(rank_list, relevant_documents, k):
-    ideal_rank_list = sorted(relevant_documents, key=lambda x: relevant_documents[x], reverse=True)
+    ideal_rank_list = sorted(rank_list, key=lambda x: relevant_documents.get(x, 0), reverse=True)
     ideal_dcg = dcg_at_k(ideal_rank_list, relevant_documents, k)
     if ideal_dcg == 0:
         return 0.0
@@ -66,9 +66,6 @@ def calculate_metric(file_data, k=10):
 # Calculate metrics for both files
 file1_metrics = calculate_metric(file1_data)
 file2_metrics = calculate_metric(file2_data)
-
-print(len(file1_metrics))
-print(len(file2_metrics))
 
 # Perform Wilcoxon signed-rank test
 statistic, p_value = wilcoxon(file1_metrics, file2_metrics)
