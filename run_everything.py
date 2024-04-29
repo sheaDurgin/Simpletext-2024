@@ -32,7 +32,7 @@ print("Creating all test qrels")
 subprocess.run(["python", "create_test_qrels.py"])
 
 # FINETUNE ON ALL EXCEPT 2023 TEST TOPICS
-print("Fine tuning cross encoder on all data")
+print("Fine tuning cross encoder on topics G01 to G15")
 subprocess.run(["python", "finetune.py", model_path, epoch, lr, prefix])
 
 print("Running cross encoder")
