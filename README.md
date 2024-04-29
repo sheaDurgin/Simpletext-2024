@@ -8,6 +8,7 @@ This repository includes all of the codes for my submission to SimpleText Task 1
 - [Text Files](#Text-Files)
 - [Steps to Run](#Steps-to-Run)
 - [Model Details](#Model-Details)
+- [Fine-Tuning](#Fine-Tuning)
 - [Results](#Final-Results-on-Unseen-2023-Test-Set)
 
 ## Installation
