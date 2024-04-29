@@ -26,8 +26,8 @@ Install libraries using pip and the requirements.txt
 Clone the repository all to one folder to properly run. Directories may need to be changed to fit your machine.
 
 ## Text Files
-- baseline.txt -> the top 95 results from ElasticSearch in a three stage search (`"{query}"`, `{query}`, `{topictext}`)
-- selective.txt -> the top results from ElasticSearch in a one stage search (`"{query}"`)
+- baseline.txt -> the top 100 results from ElasticSearch in a three stage search (`"{query}"`, `{query}`, `{topictext}`)
+- selective.txt -> the top results from ElasticSearch in a one-to-two stage search (`"{query}"`, `{query}`)
 - rr_baseline.txt -> results from cross_encoder.py using baseline.txt as argument
 - final_results.txt -> results from combine_scores.py using rr_baseline.txt and selective.txt
 
