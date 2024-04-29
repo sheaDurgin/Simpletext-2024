@@ -35,7 +35,6 @@ model.model.resize_token_embeddings(len(model.tokenizer))
 
 prefix = sys.argv[4]
 initial_retrieval = read_all_jsons(target_dir=f"{prefix}Baseline_Jsons/")
-# print(initial_retrieval.keys())
 
 topic_dic = read_topic_file("simpletext_2024_task1_queries.csv")
 sample_dic = read_qrel_file("simpletext_2024_task1_train.qrels", initial_retrieval)
@@ -58,24 +57,14 @@ for qid in sample_dic:
         else:
             train_samples.append(InputExample(texts=[original_query+" [QSP] "+topic_text, item[0]+" [TAT] "+item[1]], label=label))
 
-print(len(train_samples))
-
-pos_cnt = 0
-neg_cnt = 0
-for qid in dev_samples:
-    pos_cnt += len(dev_samples[qid]['positive'])
-    neg_cnt += len(dev_samples[qid]['negative'])
-
-print(pos_cnt)
-print(neg_cnt)
-
-num_epochs = int(sys.argv[2])
-lr = float(sys.argv[3])
 model_save_path = f"{prefix}final-{model_name.split('/')[-1]}"
 if os.path.exists(model_save_path):
     shutil.rmtree(model_save_path)
+
+num_epochs = int(sys.argv[2])
+lr = float(sys.argv[3])
+
 train_dataloader = DataLoader(train_samples, shuffle=True, batch_size=4) # 4
-#During training, we use CESoftmaxAccuracyEvaluator to measure the accuracy on the dev set.
 evaluator = CERerankingEvaluator(dev_samples, name='train-eval', write_csv=model_save_path + "/eval_csv")
 warmup_steps = math.ceil(len(train_dataloader) * num_epochs * 0.1) #10% of train data for warm-up
 
