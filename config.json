@@ -2,5 +2,4 @@
     "user": "user",
     "pass": "pass",
     "url": "https://.../_search?q=",
-    "baseurl": "https://.../_search?q=_id:"
 }
