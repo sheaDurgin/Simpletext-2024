@@ -16,6 +16,7 @@ lr = "1e-05"
 model_path = 'cross-encoder/ms-marco-MiniLM-L-6-v2'
 ft_model_path = f"{prefix}final-{model_path.split('/')[-1]}"
 final_file = f"{prefix}final_results.txt"
+old_final_results_file = "2023_final_results.txt"
 
 print("Downloading all JSONS")
 subprocess.run(["python", "download_jsons.py", baseline_folder, "2000", "1"])
@@ -48,16 +49,18 @@ subprocess.run(["python", "evaluation.py", final_file, 't_test.qrels'])
 print("Running evaluation on unseen G and T test data")
 subprocess.run(["python", "evaluation.py", final_file, 'g_and_t_test.qrels'])
 
+print("Running significance test between new results and 2023 results")
+subprocess.run(["python", "significance_testing.py", final_file, old_final_results_file, 'g_and_t_test.qrels'])
 
-# FINAL MODEL
-print("Fine tuning cross encoder on all data")
-subprocess.run(["python", "finetune.py", model_path, epoch, lr, "--final"])
+# FINAL MODEL - ONLY RUN FOR SUBMISSION
+# print("Fine tuning cross encoder on all data")
+# subprocess.run(["python", "finetune.py", model_path, epoch, lr, "--final"])
 
-print("Running cross encoder")
-subprocess.run(["python", "cross_encoder.py", baseline_file, rr_baseline_file, baseline_folder, ft_model_path]) # rr = reranked
+# print("Running cross encoder")
+# subprocess.run(["python", "cross_encoder.py", baseline_file, rr_baseline_file, baseline_folder, ft_model_path]) # rr = reranked
 
-print("Combining scores of reranked baseline and selective")
-subprocess.run(["python", "combine_scores.py", rr_baseline_file, selective_file, final_file])
+# print("Combining scores of reranked baseline and selective")
+# subprocess.run(["python", "combine_scores.py", rr_baseline_file, selective_file, final_file])
 
-print("Running evaluation on seen data")
-subprocess.run(["python", "evaluation.py", final_file, 'g_and_t_test.qrels'])
+# print("Running evaluation on seen data")
+# subprocess.run(["python", "evaluation.py", final_file, 'g_and_t_test.qrels'])
