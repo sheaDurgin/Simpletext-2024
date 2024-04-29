@@ -30,11 +30,11 @@ def fill_dev_samples(dev_samples, qid, query, topic_text, item, label):
 learning_rates = [2e-05, 1e-05, 9e-06]
 epochs = [5, 10]
 
+prefix = sys.argv[1]
 model_name = 'cross-encoder/ms-marco-MiniLM-L-6-v2'
-model_save_path = f"/mnt/netstore1_home/shea.durgin/ft_with_cv-{model_name.split('/')[-1]}"
+model_save_path = f"{prefix}ft_with_cv-{model_name.split('/')[-1]}"
 
-# initial_retrieval = read_all_jsons(target_dir='/mnt/netstore1_home/shea.durgin/simpletext_qrel_jsons/')
-initial_retrieval = read_all_jsons(target_dir="/mnt/netstore1_home/shea.durgin/Baseline_Jsons/")
+initial_retrieval = read_all_jsons(target_dir=f"{prefix}Baseline_Jsons/")
 
 topic_dic = read_topic_file("simpletext_2024_task1_queries.csv")
 qrel_dic = read_qrel_file("simpletext_2024_task1_train.qrels", initial_retrieval)
