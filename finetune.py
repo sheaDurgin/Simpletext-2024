@@ -33,8 +33,8 @@ tokens = ["[QSP]", "[TAT]"]
 model.tokenizer.add_tokens(tokens, special_tokens=True)
 model.model.resize_token_embeddings(len(model.tokenizer))
 
-
-initial_retrieval = read_all_jsons(target_dir="/mnt/netstore1_home/shea.durgin/Baseline_Jsons/")
+prefix = sys.argv[4]
+initial_retrieval = read_all_jsons(target_dir=f"{prefix}Baseline_Jsons/")
 # print(initial_retrieval.keys())
 
 topic_dic = read_topic_file("simpletext_2024_task1_queries.csv")
@@ -71,7 +71,7 @@ print(neg_cnt)
 
 num_epochs = int(sys.argv[2])
 lr = float(sys.argv[3])
-model_save_path = f"/mnt/netstore1_home/shea.durgin/final-{model_name.split('/')[-1]}"
+model_save_path = f"{prefix}final-{model_name.split('/')[-1]}"
 if os.path.exists(model_save_path):
     shutil.rmtree(model_save_path)
 train_dataloader = DataLoader(train_samples, shuffle=True, batch_size=4) # 4

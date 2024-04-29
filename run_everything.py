@@ -1,5 +1,6 @@
 import subprocess
 
+# if not empty, end with a /
 prefix = ''
 
 baseline_folder = f"{prefix}Baseline_Jsons/"
@@ -32,7 +33,7 @@ subprocess.run(["python", "create_test_qrels.py"])
 
 # FINETUNE ON ALL EXCEPT 2023 TEST TOPICS
 print("Fine tuning cross encoder on all data")
-subprocess.run(["python", "finetune.py", model_path, epoch, lr])
+subprocess.run(["python", "finetune.py", model_path, epoch, lr, prefix])
 
 print("Running cross encoder")
 subprocess.run(["python", "cross_encoder.py", baseline_file, rr_baseline_file, baseline_folder, ft_model_path]) # rr = reranked
@@ -54,7 +55,7 @@ subprocess.run(["python", "significance_testing.py", final_file, old_final_resul
 
 # FINAL MODEL - ONLY RUN FOR SUBMISSION
 # print("Fine tuning cross encoder on all data")
-# subprocess.run(["python", "finetune.py", model_path, epoch, lr, "--final"])
+# subprocess.run(["python", "finetune.py", model_path, epoch, lr, prefix, "--final"])
 
 # print("Running cross encoder")
 # subprocess.run(["python", "cross_encoder.py", baseline_file, rr_baseline_file, baseline_folder, ft_model_path]) # rr = reranked
