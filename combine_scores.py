@@ -26,7 +26,7 @@ def combine_results(file1, file2):
     combined_scores = {}
 
     add_to_map(file1, combined_scores, 60)
-    add_to_map(file2, combined_scores, 27)
+    add_to_map(file2, combined_scores, 60)
 
     # sort the combined scores dictionary by topic ID in alphabetical order
     sorted_scores = {k: v for k, v in sorted(combined_scores.items(), key=lambda item: item[0])}
