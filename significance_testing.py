@@ -43,7 +43,7 @@ def dcg_at_k(rank_list, relevant_documents, k):
         relevance = relevant_documents.get(doc_id, 0)  # Get relevance level (default to 0 if not found)
         dcg += (2 ** relevance - 1) / np.log2(i + 2)
     return dcg
-    
+
 # Calculate Normalized Discounted Cumulative Gain (NDCG) at k
 def ndcg_at_k(rank_list, relevant_documents, k):
     ideal_rank_list = sorted(rank_list, key=lambda x: relevant_documents.get(x, 0), reverse=True)

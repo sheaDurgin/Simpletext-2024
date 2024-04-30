@@ -11,6 +11,7 @@ from sentence_transformers import InputExample
 from sklearn.model_selection import KFold
 import sys
 import pandas as pd
+import shutil
 
 seed_value = 42
 
@@ -101,6 +102,9 @@ for num_epochs in epochs:
             csv_path = model_save_path + "/CERerankingEvaluator_train-eval_results_@10.csv"
             df = pd.read_csv(csv_path)
             all_scores.append(df['NDCG@10'].tail(num_epochs).max())
+            
+            if os.path.exists(model_save_path):
+                shutil.rmtree(model_save_path)
 
         print(all_scores)
         avg = sum(all_scores) / len(all_scores)
