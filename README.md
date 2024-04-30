@@ -13,7 +13,7 @@ This repository includes all of the codes for my submission to SimpleText Task 1
 
 ## Installation
 
-To run this code, you will need access to the [dataset](https://simpletext-project.com/2024/en/) for task 1 of SimpleText CLEF lab, and login details to access their servers. I will be assuming you have access for the rest of the explanation.
+This repository was created on Python 3.8.18, no testing done on other versions. To run this code, you will need access to the [dataset](https://simpletext-project.com/2024/en/) for task 1 of SimpleText CLEF lab, and login details to access their servers. I will be assuming you have access for the rest of the explanation.
 
 First create a virtual environment, for example
 
