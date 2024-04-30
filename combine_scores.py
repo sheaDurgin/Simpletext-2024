@@ -1,7 +1,6 @@
 import sys
 
 def main():
-    # worse resulting file goes first
     args = sys.argv[1:]
     my_filename1 = args[0]
     my_filename2 = args[1]
